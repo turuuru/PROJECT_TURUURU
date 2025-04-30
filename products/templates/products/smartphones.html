@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Смартфоны</title>
+    <style>
+        .phone-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .phone-item {
+            border: 1px solid #ccc;
+            padding: 16px;
+            border-radius: 10px;
+            width: 220px;
+        }
+        .phone-item img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Смартфоны</h1>
+    <div class="phone-container">
+        {% for phone in phones %}
+            <div class="phone-item">
+                <h2>{{ phone.name }}</h2>
+                <p><strong>Бренд:</strong> {{ phone.get_brand_display }}</p>
+                <p><strong>Память:</strong> {{ phone.memory }} GB</p>
+                <p>{{ phone.description }}</p>
+                <p class="price">Цена: {{ phone.price }} ₸</p>
+                {% if phone.image %}
+                    <img src="{{ phone.image.url }}" alt="{{ phone.name }}">
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Телефоны не найдены.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

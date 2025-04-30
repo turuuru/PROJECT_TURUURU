@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{{ product.name }}</h2>
+  <p>{{ product.description }}</p>
+  <p>Цена: {{ product.price }} ₸</p>
+
+  <!-- 👇 Добавляем кнопку "В корзину" -->
+  <a href="{% url 'add_to_cart' product.id %}">🛒 В корзину</a>
+{% endblock %}
