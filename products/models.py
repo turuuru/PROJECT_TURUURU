@@ -5,7 +5,7 @@ class Product(models.Model):
         ('apple', 'Apple'),
         ('samsung', 'Samsung'),
         ('xiaomi', 'Xiaomi'),
-        ('other', 'Other'),
+        ('other', 'Другие'),  # Добавлено
     ]
 
     name = models.CharField(max_length=255)
@@ -13,7 +13,7 @@ class Product(models.Model):
     memory = models.PositiveIntegerField(help_text="Memory in GB")
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='products/')
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

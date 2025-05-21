@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Спасибо за обращение</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/support.css' %}">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .thanks-container {
+            max-width: 700px;
+            margin: 100px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .thanks-container h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+
+        .thanks-container p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .thanks-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 20px;
+            background: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'home' %}">Главная</a>
+            <a href="{% url 'smartphones' %}">Смартфоны</a>
+            <a href="{% url 'cart_view' %}">Корзина</a>
+            <a href="{% url 'support' %}">Поддержка</a>
+        </nav>
+    </header>
+
+    <div class="thanks-container">
+        <h1>Спасибо!</h1>
+        <p>Ваше сообщение было успешно отправлено. Мы свяжемся с вами в ближайшее время.</p>
+        <a href="{% url 'home' %}">Вернуться на главную</a>
+    </div>
+
+    <footer>
+        <p>© 2025 JUSAN. Все права защищены.</p>
+    </footer>
+</body>
+</html>

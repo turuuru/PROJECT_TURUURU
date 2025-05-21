@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Профиль пользователя</title>
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="{% url 'home' %}">Главная</a>
+      <a href="{% url 'smartphones' %}">Смартфоны</a>
+      <a href="{% url 'cart_view' %}">Корзина</a>
+      <a href="{% url 'support' %}">Поддержка</a>
+      <a href="{% url 'logout' %}">Выйти</a>
+    </nav>
+  </header>
+
+  <main class="profile-container">
+    <h1>Добро пожаловать, {{ user.username }}!</h1>
+
+    <div class="profile-content">
+      <div class="profile-info">
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Дата регистрации:</strong> {{ user.date_joined|date:"d.m.Y H:i" }}</p>
+
+        <div class="profile-actions">
+          <a href="{% url 'password_change' %}" class="btn">Сменить пароль</a>
+          <a href="#" class="btn btn-secondary">Редактировать профиль</a>
+        </div>
+
+        <div class="order-stats">
+          <h3>Статистика заказов</h3>
+          <ul>
+            <li>Всего заказов: <strong>3</strong></li>
+            <li>Общая сумма: <strong>123,000 ₸</strong></li>
+            <li>Последний заказ: <strong>15.04.2025</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="profile-photo">
+        <img src="{% static 'img/profile_icon.png' %}" alt="Фото профиля">
+      </div>
+    </div>
+
+    <section class="recent-cart">
+      <h2>Последние товары в корзине</h2>
+      {% for item in cart_items|slice:":3" %}
+        <div class="cart-item">
+          <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+          <div>
+            <p>{{ item.product.name }}</p>
+            <p><strong>{{ item.product.price }} ₸</strong></p>
+          </div>
+        </div>
+      {% empty %}
+        <p>Корзина пуста</p>
+      {% endfor %}
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 JUSAN. Все права защищены.</p>
+  </footer>
+</body>
+</html>

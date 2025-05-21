@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Поддержка</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/support.css' %}">
+    <style>
+        /* [CSS — тот же, без изменений] */
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'home' %}">Главная</a>
+            <a href="{% url 'smartphones' %}">Смартфоны</a>
+            <a href="{% url 'cart_view' %}">Корзина</a>
+            <a href="{% url 'support' %}">Поддержка</a>
+        </nav>
+    </header>
+
+    <div class="support-container">
+        <div class="faq">
+            <h1>Часто задаваемые вопросы</h1>
+            <ul>
+                <li>
+                    <strong>Как сделать заказ?</strong>
+                    Выберите товар, нажмите «В корзину» и оформите заказ через страницу корзины.
+                </li>
+                <li>
+                    <strong>Можно ли оплатить при получении?</strong>
+                    Да, доступна оплата при получении в некоторых регионах.
+                </li>
+                <li>
+                    <strong>Как вернуть товар?</strong>
+                    Свяжитесь с нашей поддержкой в течение 14 дней после получения.
+                </li>
+            </ul>
+        </div>
+        <div class="contact-form">
+            <h1>Свяжитесь с нами</h1>
+            {% if success %}
+                <p style="color: green;">Ваше сообщение успешно отправлено!</p>
+            {% endif %}
+            {% if error %}
+                <p style="color: red;">{{ error }}</p>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <label for="name">Ваше имя</label>
+                <input type="text" id="name" name="name" placeholder="Введите ваше имя" required>
+
+                <label for="email">Электронная почта</label>
+                <input type="email" id="email" name="email" placeholder="example@mail.com" required>
+
+                <label for="message">Сообщение</label>
+                <textarea id="message" name="message" rows="5" placeholder="Опишите вашу проблему..." required></textarea>
+
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 JUSAN. Все права защищены.</p>
+    </footer>
+</body>
+</html>

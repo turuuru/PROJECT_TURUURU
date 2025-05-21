@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Оформление заказа</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 15px 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .container {
+      display: flex;
+      gap: 40px;
+      padding: 40px;
+      background-color: #fff;
+      margin-top: 20px;
+    }
+
+    .left, .right {
+      flex: 1;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .left h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    h1, h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    .product-block {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+
+    .product-block img {
+      width: 100%;
+      max-width: 200px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .remove-button {
+      background-color: #e74c3c;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .remove-button:hover {
+      background-color: #c82333;
+    }
+
+    .submit-button {
+      background-color: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 15px;
+    }
+
+    .submit-button:hover {
+      background-color: #218838;
+    }
+
+    .terms {
+      margin-top: 1em;
+    }
+
+    .payment-methods {
+      margin-top: 20px;
+    }
+
+    .payment-methods label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .card-details {
+      margin-top: 15px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      display: none;
+    }
+
+    .card-details input {
+      width: 100%;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      padding: 20px;
+      background: #f1f1f1;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .messages {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 15px;
+      margin: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="{% url 'home' %}">Главная</a>
+      <a href="{% url 'smartphones' %}">Смартфоны</a>
+      <a href="{% url 'cart_view' %}">Корзина</a>
+      <a href="{% url 'support' %}">Поддержка</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="left">
+      <h1>Оформление заказа</h1>
+
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if not cart_items %}
+        <p>Ваша корзина пуста. Пожалуйста, добавьте товары в корзину.</p>
+      {% else %}
+        <h2>Итого:</h2>
+        <p><strong>{{ total_price }} KZT</strong></p>
+        <form method="POST">
+          {% csrf_token %}
+          <textarea name="order_comments" placeholder="Комментарии к заказу..." rows="4" style="width: 100%;"></textarea>
+
+          <div class="payment-methods">
+            <p><strong>Выберите способ оплаты:</strong></p>
+            <label><input type="radio" name="payment_method" value="card" required> Оплата картой</label>
+            <label><input type="radio" name="payment_method" value="cash"> Наличными при получении</label>
+          </div>
+
+          <div class="card-details" id="cardDetails">
+            <input type="text" name="card_number" placeholder="Номер карты" maxlength="19" pattern="\d{16,19}" title="Введите корректный номер карты" autocomplete="off">
+            <input type="text" name="card_expiry" placeholder="Срок действия (MM/YY)" maxlength="5" pattern="(0[1-9]|1[0-2])\/\d{2}" title="Введите срок в формате MM/YY" autocomplete="off">
+            <input type="text" name="card_cvc" placeholder="CVC" maxlength="3" pattern="\d{3}" title="Введите CVC" autocomplete="off">
+          </div>
+
+          <div class="terms">
+            <input type="checkbox" id="agree_terms" required>
+            <label for="agree_terms">Согласен(-а) с условиями</label>
+          </div>
+
+          <button type="submit" class="submit-button">Оформить</button>
+        </form>
+      {% endif %}
+    </div>
+
+    <div class="right">
+      {% for item in cart_items %}
+        <div class="product-block">
+          {% if item.product.image %}
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+          {% else %}
+            <img src="{% static 'img/default-phone.jpg' %}" alt="Нет изображения">
+          {% endif %}
+          <p><strong>{{ item.product.name }}</strong></p>
+          <p>Кол-во: {{ item.quantity }}</p>
+          <form method="POST" action="{% url 'remove_from_cart' item.id %}">
+            {% csrf_token %}
+            <button class="remove-button" type="submit">Убрать из корзины</button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 JUSAN. Все права защищены.</p>
+  </footer>
+
+  <script>
+    const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+    const cardDetails = document.getElementById('cardDetails');
+
+    paymentRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.value === 'card' && radio.checked) {
+          cardDetails.style.display = 'block';
+          // Сделать поля обязательными, если надо
+          cardDetails.querySelectorAll('input').forEach(input => input.required = true);
+        } else {
+          cardDetails.style.display = 'none';
+          cardDetails.querySelectorAll('input').forEach(input => input.required = false);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

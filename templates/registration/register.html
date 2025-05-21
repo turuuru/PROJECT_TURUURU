@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-card">
+            <h2>Регистрация</h2>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                
+                <label for="id_username">Имя пользователя</label>
+                <input type="text" id="id_username" name="username" maxlength="150" required />
+                
+                <label for="id_password1" style="margin-top:15px;">Пароль</label>
+                <input type="password" id="id_password1" name="password1" required />
+                
+                <label for="id_password2" style="margin-top:15px;">Подтверждение пароля</label>
+                <input type="password" id="id_password2" name="password2" required />
+                
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+            <div class="login-link">
+                <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

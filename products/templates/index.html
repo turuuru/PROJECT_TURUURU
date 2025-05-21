@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>JUSAN — Магазин</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/index1.css' %}">
+  <style>
+    .profile-wrapper {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      text-align: center;
+    }
+    .profile-wrapper img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .profile-wrapper a {
+      display: block;
+      margin-top: 5px;
+      font-size: 14px;
+      color: #000;
+      text-decoration: none;
+    }
+    nav {
+      display: flex;
+      gap: 15px;
+      padding: 20px;
+      position: relative;
+    }
+    .product-item a, .hit-item a {
+      color: inherit;
+      text-decoration: none;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="{% url 'home' %}">Главная</a>
+      <a href="{% url 'smartphones' %}">Смартфоны</a>
+      <a href="{% url 'cart_view' %}">Корзина</a>
+      <a href="{% url 'support' %}">Поддержка</a>
+
+      {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Выйти</a>
+      {% else %}
+        <a href="{% url 'login' %}">Войти</a>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+        <div class="profile-wrapper">
+          <a href="{% url 'profile' %}">
+            <img src="{% static 'img/profile_icon.png' %}" alt="Профиль" />
+          </a>
+        </div>
+      {% endif %}
+    </nav>
+  </header>
+
+  <div class="main-banner">
+    <div class="banner-content">
+      <h1>Добро пожаловать в JUSAN Store</h1>
+      <p>Лучшие смартфоны, ноутбуки, техника Xiaomi и многое другое</p>
+    </div>
+  </div>
+
+  {% if user.is_authenticated %}
+    <section class="products">
+      <div class="product-item">
+        <a href="{% url 'product_detail' 19 %}">
+          <img src="{% static 'img/samsung/Galaxy A56 5G.png' %}" alt="Samsung Galaxy A56 5G" />
+          <h3>Galaxy A56 5G</h3>
+          <p>Новый смартфон с отличной камерой и производительностью</p>
+        </a>
+      </div>
+      <div class="product-item">
+        <a href="{% url 'product_detail' 12 %}">
+          <img src="{% static 'img/miui/Xiaomi Redmi Note 14 Pro.png' %}" alt="Xiaomi Redmi Note 14 Pro" />
+          <h3>Xiaomi Redmi Note 14 Pro</h3>
+          <p>Современный смартфон с отличными характеристиками</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="season-hits">
+      <h2>Хиты сезона</h2>
+      <div class="hit-carousel">
+        <div class="hit-item">
+          <a href="{% url 'product_detail' 24 %}">
+            <img src="{% static 'img/Apple/iPhone 13.png' %}" alt="iPhone 13" />
+            <p>iPhone 13</p>
+          </a>
+        </div>
+        <div class="hit-item">
+          <a href="{% url 'product_detail' 11 %}">
+            <img src="{% static 'img/miui/Xiaomi Redmi Note 14.png' %}" alt="Xiaomi Redmi Note 14" />
+            <p>Xiaomi Redmi Note 14</p>
+          </a>
+        </div>
+      </div>
+    </section>
+  {% else %}
+    <section class="products">
+      <h2>Просмотр товаров доступен только авторизованным пользователям</h2>
+      <p><a href="{% url 'login' %}">Войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a>, чтобы начать покупки.</p>
+    </section>
+  {% endif %}
+
+  <section class="site-info">
+    <h2>Официальный интернет-магазин продукции Xiaomi</h2>
+    <p>Самая крупная авторизованная сеть магазинов Xiaomi Store в Казахстане...</p>
+    <ul>
+      <li>Широкий ассортимент сертифицированных товаров</li>
+      <li>Официальная гарантия: 1 год</li>
+      <li>Бесплатная доставка по всему Казахстану</li>
+      <li>Сервисные центры во всех крупных городах</li>
+    </ul>
+    <div class="ratings">
+      <p>99,2% положительных отзывов</p>
+      <p>Рейтинг рассчитан на основе оценок покупателей...</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 JUSAN. Все права защищены.</p>
+  </footer>
+</body>
+</html>

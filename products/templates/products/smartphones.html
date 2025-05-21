@@ -1,44 +1,103 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Смартфоны</title>
-    <style>
-        .phone-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+    <link rel="stylesheet" href="{% static 'css/smartphones.css' %}" />
+    <script>
+        function showPopup() {
+            document.getElementById("popup").style.display = "block";
         }
-        .phone-item {
-            border: 1px solid #ccc;
-            padding: 16px;
-            border-radius: 10px;
-            width: 220px;
+        function hidePopup() {
+            document.getElementById("popup").style.display = "none";
         }
-        .phone-item img {
-            width: 100%;
-            height: auto;
-        }
-    </style>
+    </script>
 </head>
 <body>
-    <h1>Смартфоны</h1>
-    <div class="phone-container">
-        {% for phone in phones %}
-            <div class="phone-item">
-                <h2>{{ phone.name }}</h2>
-                <p><strong>Бренд:</strong> {{ phone.get_brand_display }}</p>
-                <p><strong>Память:</strong> {{ phone.memory }} GB</p>
-                <p>{{ phone.description }}</p>
-                <p class="price">Цена: {{ phone.price }} ₸</p>
-                {% if phone.image %}
-                    <img src="{{ phone.image.url }}" alt="{{ phone.name }}">
-                {% endif %}
+    <header>
+        <nav>
+            <a href="{% url 'home' %}">Главная</a>
+            <a href="{% url 'smartphones' %}">Смартфоны</a>
+            <a href="{% url 'cart_view' %}">Корзина</a>
+            <a href="{% url 'support' %}">Поддержка</a>
+        </nav>
+    </header>
+
+    <div class="filter-container">
+        <form method="GET" action="{% url 'smartphones' %}">
+            <div class="filter-group">
+                <label for="brand">Бренд:</label>
+                <select name="brand" id="brand">
+                    <option value="">Все</option>
+                    <option value="apple" {% if request.GET.brand == 'apple' %}selected{% endif %}>Apple</option>
+                    <option value="samsung" {% if request.GET.brand == 'samsung' %}selected{% endif %}>Samsung</option>
+                    <option value="xiaomi" {% if request.GET.brand == 'xiaomi' %}selected{% endif %}>Xiaomi</option>
+                    <option value="other" {% if request.GET.brand == 'other' %}selected{% endif %}>Другие</option>
+                </select>
             </div>
-        {% empty %}
-            <p>Телефоны не найдены.</p>
-        {% endfor %}
+
+            <div class="filter-group">
+                <label for="memory">Память (GB):</label>
+                <input type="number" name="memory" id="memory" value="{{ request.GET.memory }}" min="0">
+            </div>
+
+            <div class="filter-group">
+                <label for="min_price">Мин. цена:</label>
+                <input type="number" name="min_price" id="min_price" value="{{ request.GET.min_price }}" min="0" step="0.01">
+            </div>
+
+            <div class="filter-group">
+                <label for="max_price">Макс. цена:</label>
+                <input type="number" name="max_price" id="max_price" value="{{ request.GET.max_price }}" min="0" step="0.01">
+            </div>
+
+            <button type="submit">Применить фильтры</button>
+        </form>
     </div>
+
+    <main class="products-container">
+        {% for phone in phones %}
+        <div class="product-card">
+            <div class="phone-image">
+                <a href="{% url 'product_detail' phone.id %}">
+                    {% if phone.image %}
+                        <img src="{{ phone.image.url }}" alt="{{ phone.name }}">
+                    {% else %}
+                        <img src="{% static 'img/xiaomi3.jpg' %}" alt="{{ phone.name }}">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="phone-description">
+                <h1><a href="{% url 'product_detail' phone.id %}">{{ phone.name }}</a></h1>
+                <p>Цена: {{ phone.price }} KZT</p>
+                <form method="POST" action="{% url 'add_to_cart' phone.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="add-to-cart">В корзину</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </main>
+
+    {% if message %}
+    <div id="popup" class="popup">
+        <p>{{ message }}</p>
+        <form action="{% url 'smartphones' %}" method="get" style="display: inline;">
+            <button type="submit">Продолжить покупки</button>
+        </form>
+        <form action="{% url 'cart_view' %}" method="get" style="display: inline;">
+            <button type="submit">Перейти в корзину</button>
+        </form>
+        <button onclick="hidePopup()">Закрыть</button>
+    </div>
+    <script>showPopup();</script>
+    {% endif %}
+
+    <footer>
+        <p>© 2025 JUSAN Store</p>
+    </footer>
 </body>
 </html>
